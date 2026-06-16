@@ -41,6 +41,14 @@ export function getRanking() {
   return table.sort((a, b) => b.points - a.points);
 }
 
+/* Retorna a posição (1-based) de um usuário no ranking. Retorna null se não encontrado. */
+export function positionOf(username) {
+  if (!username) return null;
+  const table = getRanking();
+  const idx   = table.findIndex(r => r.name.toLowerCase() === username.toLowerCase());
+  return idx >= 0 ? idx + 1 : null;
+}
+
 /* Renderiza o ranking no DOM */
 export function renderRanking() {
   const el = document.getElementById('ranking-list');

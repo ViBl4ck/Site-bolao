@@ -108,18 +108,17 @@ export function initAuth() {
     showLoginForm();
   });
 
-  /* Link "Usuário" na sidebar */
+  /* Link "Usuário" na sidebar: abre perfil se logado, modal de login se não */
   document.getElementById('nav-user')?.addEventListener('click', e => {
     e.preventDefault();
+    document.getElementById('sidebar')?.classList.remove('sidebar--open');
+    document.getElementById('overlay')?.classList.remove('overlay--visible');
     if (state.user) {
-      logout();
+      document.dispatchEvent(new CustomEvent('cravou:openprofile'));
     } else {
       openModal('modal-auth');
       showLoginForm();
     }
-    closeModal('sidebar');
-    document.getElementById('sidebar')?.classList.remove('sidebar--open');
-    document.getElementById('overlay')?.classList.remove('overlay--visible');
   });
 
   /* Logout topbar */

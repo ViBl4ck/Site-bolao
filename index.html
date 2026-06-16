@@ -64,7 +64,9 @@
 
       <!-- Exibido quando logado -->
       <div id="topbar-user" class="topbar__user" style="display:none" aria-live="polite">
-        <span id="topbar-username" class="topbar__username"></span>
+        <button id="topbar-profile-btn" class="topbar__username-btn" aria-label="Ver meu perfil">
+          <span id="topbar-username"></span>
+        </button>
         <button id="topbar-logout" class="btn btn--sm btn--outline" data-i18n="auth.logout">Sair</button>
       </div>
     </nav>
@@ -148,6 +150,9 @@
     </section>
 
   </main>
+
+  <!-- ===== PERFIL ===== -->
+  <section id="profile-view" class="profile-view wrap" hidden aria-label="Meu perfil"></section>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer" role="contentinfo">

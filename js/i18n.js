@@ -89,7 +89,23 @@ export const dict = {
     'create.vsB':           'Time / lado B',
     'create.needLogin':     'Faça login para criar um bolão!',
     'create.customBadge':   'Bolão',
-    'create.topbarBtn':     '+ Criar'
+    'create.topbarBtn':     '+ Criar',
+    /* Perfil */
+    'profile.title':        'Meu Perfil',
+    'profile.back':         'Voltar',
+    'profile.rankBadge':    'no ranking',
+    'profile.stPoints':     'Pontos',
+    'profile.stAccuracy':   'Aproveitamento',
+    'profile.stExact':      'Cravadas',
+    'profile.stPartial':    'Parciais',
+    'profile.stMiss':       'Erros',
+    'profile.stPending':    'Pendentes',
+    'profile.stCreated':    'Bolões criados',
+    'profile.history':      '📋 Histórico de Palpites',
+    'profile.myPools':      '🎲 Meus Bolões',
+    'profile.emptyHistory': 'Você ainda não fez nenhum palpite.',
+    'profile.emptyPools':   'Você ainda não criou nenhum bolão.',
+    'profile.palpite':      'Palpite'
   },
 
   en: {
@@ -165,7 +181,22 @@ export const dict = {
     'create.vsB':           'Team / side B',
     'create.needLogin':     'Log in to create a pool!',
     'create.customBadge':   'Pool',
-    'create.topbarBtn':     '+ Create'
+    'create.topbarBtn':     '+ Create',
+    'profile.title':        'My Profile',
+    'profile.back':         'Back',
+    'profile.rankBadge':    'in ranking',
+    'profile.stPoints':     'Points',
+    'profile.stAccuracy':   'Accuracy',
+    'profile.stExact':      'Exact',
+    'profile.stPartial':    'Partial',
+    'profile.stMiss':       'Missed',
+    'profile.stPending':    'Pending',
+    'profile.stCreated':    'Pools created',
+    'profile.history':      '📋 Prediction History',
+    'profile.myPools':      '🎲 My Pools',
+    'profile.emptyHistory': 'You haven\'t made any predictions yet.',
+    'profile.emptyPools':   'You haven\'t created any pools yet.',
+    'profile.palpite':      'Pick'
   },
 
   es: {
@@ -241,7 +272,22 @@ export const dict = {
     'create.vsB':           'Equipo / lado B',
     'create.needLogin':     '¡Inicia sesión para crear una quiniela!',
     'create.customBadge':   'Quiniela',
-    'create.topbarBtn':     '+ Crear'
+    'create.topbarBtn':     '+ Crear',
+    'profile.title':        'Mi Perfil',
+    'profile.back':         'Volver',
+    'profile.rankBadge':    'en el ranking',
+    'profile.stPoints':     'Puntos',
+    'profile.stAccuracy':   'Rendimiento',
+    'profile.stExact':      'Exactas',
+    'profile.stPartial':    'Parciales',
+    'profile.stMiss':       'Errores',
+    'profile.stPending':    'Pendientes',
+    'profile.stCreated':    'Quinielas creadas',
+    'profile.history':      '📋 Historial de Apuestas',
+    'profile.myPools':      '🎲 Mis Quinielas',
+    'profile.emptyHistory': 'Aún no has hecho ninguna predicción.',
+    'profile.emptyPools':   'Aún no has creado ninguna quiniela.',
+    'profile.palpite':      'Apuesta'
   }
 };
 

@@ -1008,3 +1008,245 @@
   font-size: 2.5rem;
   margin-bottom: var(--gap-sm);
 }
+
+/* ===== TOPBAR — botão de perfil (username chip) ===== */
+.topbar__username-btn {
+  background: var(--clr-accent-glow);
+  border: 1.5px solid var(--clr-accent);
+  border-radius: var(--radius-full);
+  padding: 0.3em 0.9em;
+  color: var(--clr-accent);
+  font-weight: var(--fw-semibold);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar__username-btn:hover {
+  background: var(--clr-accent);
+  color: var(--text-on-accent);
+}
+
+/* ===== TELA DE PERFIL ===== */
+.profile-view {
+  min-height: calc(100vh - 64px);
+  padding: var(--gap-lg) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xl);
+}
+
+/* Cabeçalho */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.profile-back {
+  align-self: flex-start;
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--clr-accent), var(--clr-secondary));
+  color: #fff;
+  font-size: 2rem;
+  font-weight: var(--fw-extrabold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 16px var(--clr-accent-glow);
+}
+
+.profile-identity__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-name {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: var(--fw-extrabold);
+  color: var(--text);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.profile-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: var(--fw-semibold);
+  background: rgba(0,184,107,0.12);
+  color: var(--clr-accent);
+  border: 1px solid rgba(0,184,107,0.3);
+  border-radius: var(--radius-full);
+  padding: 0.2em 0.75em;
+}
+
+/* Grid de stats */
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--gap-sm);
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--gap) var(--gap-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+
+.stat-card__icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.stat-card__value {
+  font-size: 1.5rem;
+  font-weight: var(--fw-extrabold);
+  color: var(--clr-accent);
+  line-height: 1;
+}
+
+.stat-card__label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--fw-medium);
+}
+
+/* Seções de conteúdo */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+/* Listas */
+.history-list,
+.boloes-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+/* Linha de histórico */
+.history-row {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--gap) var(--gap-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+
+.history-row:hover {
+  box-shadow: var(--shadow);
+}
+
+.history-row__main {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.history-row__teams {
+  font-weight: var(--fw-bold);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.history-row__comp {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.history-row__details {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  flex-wrap: wrap;
+}
+
+.history-row__pred,
+.history-row__result {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.history-row__pred strong,
+.history-row__result strong {
+  color: var(--text);
+  font-weight: var(--fw-semibold);
+}
+
+/* Pílula de pontos */
+.pts-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.78rem;
+  font-weight: var(--fw-bold);
+  padding: 0.2em 0.65em;
+  border-radius: var(--radius-full);
+}
+
+.pts-pill--2 {
+  background: rgba(0,184,107,0.15);
+  color: var(--clr-open);
+}
+
+.pts-pill--1 {
+  background: rgba(234,179,8,0.15);
+  color: #ca8a04;
+}
+
+.pts-pill--0 {
+  background: rgba(107,114,128,0.12);
+  color: var(--clr-finished);
+}
+
+/* Responsivo */
+@media (max-width: 480px) {
+  .profile-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stat-card__value { font-size: 1.2rem; }
+}

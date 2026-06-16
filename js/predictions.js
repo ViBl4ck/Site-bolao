@@ -65,6 +65,11 @@ function savePrediction() {
   }, 800);
 }
 
+/* Retorna um snapshot das predições do usuário atual */
+export function mine() {
+  return { ...state.predictions };
+}
+
 export function initPredictions() {
   document.getElementById('btn-save-prediction')?.addEventListener('click', savePrediction);
 

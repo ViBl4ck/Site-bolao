@@ -14,10 +14,13 @@ import { renderRanking }           from './ranking.js';
 import { initSettings, applySettings } from './settings.js';
 import { setupModalClose, toast, openModal } from './ui.js';
 import { Creator, initCreator, openSetResultModal } from './creator.js';
+import { Profile }                 from './profile.js';
 
 /* ---- 1. INICIALIZAÇÃO ---- */
 initState();
 applySettings();
+
+let currentView = 'feed';
 
 /* ---- 2. SETUP DOS MÓDULOS ---- */
 initSidebar();
@@ -43,6 +46,16 @@ document.getElementById('nav-bet')?.addEventListener('click', e => {
 /* Botão da topbar */
 document.getElementById('btn-create')?.addEventListener('click', () => Creator.open());
 
+/* ---- 3b. PERFIL ---- */
+/* Nome do usuário na topbar abre o perfil */
+document.getElementById('topbar-profile-btn')?.addEventListener('click', () => Profile.open());
+
+/* Evento disparado por auth.js (sidebar "Usuário") */
+document.addEventListener('cravou:openprofile', () => Profile.open());
+
+/* Rastreia a view atual para re-renderizar perfil quando necessário */
+document.addEventListener('cravou:view', e => { currentView = e.detail; });
+
 /* ---- 4. RENDER INICIAL ---- */
 renderAllEvents();
 renderRanking();
@@ -62,18 +75,24 @@ setInterval(() => {
 
 /* ---- 6. EVENTOS GLOBAIS ---- */
 document.addEventListener('cravou:authchange', () => {
+  if (currentView === 'profile') {
+    if (!state.user) Profile.close();
+    else Profile.render();
+  }
   renderAllEvents();
   renderRanking();
   updateHeroStats();
 });
 
 document.addEventListener('cravou:predictionchange', () => {
+  if (currentView === 'profile') Profile.render();
   renderAllEvents();
   renderRanking();
 });
 
 document.addEventListener('cravou:langchange', () => {
   applyI18n();
+  if (currentView === 'profile') Profile.render();
   renderAllEvents();
   renderRanking();
   rebuildCarousel();
