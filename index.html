@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light" data-contrast="normal" data-motion="normal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cravou! A plataforma de bolões para esportes, jogos e eventos.">
+  <title>Cravou — Bolões</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ===== OVERLAY (fecha sidebar) ===== -->
+  <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar" class="sidebar" role="navigation" aria-label="Menu lateral">
+    <div class="sidebar__header">
+      <span class="sidebar__logo">🎯 Cravou</span>
+      <button id="sidebar-close" class="sidebar__close" aria-label="Fechar menu">✕</button>
+    </div>
+    <nav class="sidebar__nav">
+      <ul>
+        <li>
+          <a href="#" class="sidebar__link" id="nav-user" data-i18n="nav.user">👤 Usuário</a>
+        </li>
+        <li>
+          <a href="#open-events" class="sidebar__link" data-i18n="nav.games">🎮 Jogos</a>
+        </li>
+        <li>
+          <a href="#open-events" class="sidebar__link" data-i18n="nav.sports">⚽ Esportes</a>
+        </li>
+        <li>
+          <a href="#open-events" class="sidebar__link" data-i18n="nav.category">🏷️ Categoria</a>
+        </li>
+        <li>
+          <a href="#live-events" class="sidebar__link" data-i18n="nav.live">🔴 Ao Vivo</a>
+        </li>
+        <li>
+          <a href="#open-events" class="sidebar__link sidebar__link--cta" data-i18n="nav.bet">🎯 Faça sua aposta</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Info do usuário logado -->
+    <div id="sidebar-user-info" class="sidebar__user" style="display:none">
+      <span id="sidebar-username" class="sidebar__username"></span>
+      <button id="sidebar-logout" class="btn btn--sm btn--outline" data-i18n="auth.logout">Sair</button>
+    </div>
+  </aside>
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar" role="banner">
+    <button id="menu-btn" class="topbar__menu" aria-label="Abrir menu" aria-expanded="false"
+            aria-controls="sidebar">☰</button>
+
+    <a href="#" class="topbar__brand" aria-label="Cravou — página inicial">🎯 Cravou</a>
+
+    <nav class="topbar__actions" aria-label="Ações do usuário">
+      <button id="btn-settings" class="btn btn--icon" aria-label="Configurações" title="Configurações">⚙️</button>
+
+      <!-- Exibido quando deslogado -->
+      <button id="btn-auth" class="btn btn--primary btn--sm" data-i18n="auth.login">Entrar</button>
+
+      <!-- Exibido quando logado -->
+      <div id="topbar-user" class="topbar__user" style="display:none" aria-live="polite">
+        <span id="topbar-username" class="topbar__username"></span>
+        <button id="topbar-logout" class="btn btn--sm btn--outline" data-i18n="auth.logout">Sair</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===== CONTEÚDO PRINCIPAL ===== -->
+  <main class="wrap" id="main-content">
+
+    <!-- HERO -->
+    <section class="hero" id="hero" aria-label="Boas-vindas">
+      <div class="hero__content">
+        <h1 class="hero__title" data-i18n="hero.title">Cravou! O seu bolão definitivo.</h1>
+        <p class="hero__subtitle" data-i18n="hero.subtitle">
+          Palpite em esportes, jogos e eventos. Compete com seus amigos e mostre quem cravou!
+        </p>
+        <a href="#open-events" class="btn btn--primary btn--lg" data-i18n="hero.cta">
+          Faça seu Bolão 🎯
+        </a>
+        <div class="hero__stats" aria-label="Estatísticas">
+          <div class="hero__stat">
+            <span class="hero__stat-number" id="stat-events">7</span>
+            <span class="hero__stat-label" data-i18n="hero.stat.events">Eventos</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-number" id="stat-players">9</span>
+            <span class="hero__stat-label" data-i18n="hero.stat.players">Participantes</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-number" id="stat-open">3</span>
+            <span class="hero__stat-label" data-i18n="hero.stat.open">Em aberto</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARROSSEL DE DESTAQUES -->
+    <section class="section carousel-section" aria-label="Eventos em destaque">
+      <h2 class="section__title" data-i18n="carousel.title">🌟 Destaques</h2>
+      <div class="carousel" id="carousel">
+        <button class="carousel__btn carousel__btn--prev" id="carousel-prev"
+                aria-label="Slide anterior">‹</button>
+        <div class="carousel__track-wrap">
+          <div class="carousel__track" id="carousel-track" role="list"></div>
+        </div>
+        <button class="carousel__btn carousel__btn--next" id="carousel-next"
+                aria-label="Próximo slide">›</button>
+        <div class="carousel__dots" id="carousel-dots" role="tablist" aria-label="Slides"></div>
+      </div>
+    </section>
+
+    <!-- EVENTOS ABERTOS -->
+    <section class="section" id="open-events" aria-labelledby="title-open">
+      <h2 class="section__title" id="title-open">
+        🟢 <span data-i18n="events.open">Abertos</span>
+      </h2>
+      <div class="cards-grid" id="open-events-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- AO VIVO -->
+    <section class="section" id="live-events" aria-labelledby="title-live">
+      <h2 class="section__title" id="title-live">
+        🔴 <span data-i18n="events.live">Ao Vivo</span>
+      </h2>
+      <div class="cards-grid" id="live-events-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- ENCERRADOS -->
+    <section class="section" id="finished-events" aria-labelledby="title-finished">
+      <h2 class="section__title" id="title-finished">
+        🏁 <span data-i18n="events.finished">Encerrados</span>
+      </h2>
+      <div class="cards-grid" id="finished-events-grid" aria-live="polite"></div>
+    </section>
+
+    <!-- RANKING -->
+    <section class="section" id="ranking-section" aria-labelledby="title-ranking">
+      <h2 class="section__title" id="title-ranking">
+        🏆 <span data-i18n="ranking.title">Ranking</span>
+      </h2>
+      <div class="ranking" id="ranking-list" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__content">
+      <p class="footer__brand">🎯 Cravou</p>
+      <p class="footer__copy" id="footer-copy"></p>
+      <p class="footer__credit">Feito por <strong>Vitor Camargo</strong></p>
+    </div>
+  </footer>
+
+  <!-- ===== MODAL: AUTH ===== -->
+  <div class="modal" id="modal-auth" role="dialog" aria-modal="true"
+       aria-labelledby="modal-auth-title">
+    <div class="modal__box">
+      <button class="modal__close" data-close="modal-auth" aria-label="Fechar">✕</button>
+
+      <!-- Tabs -->
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab auth-tab--active" id="tab-login"
+                role="tab" aria-selected="true" data-i18n="auth.login">Entrar</button>
+        <button class="auth-tab" id="tab-register"
+                role="tab" aria-selected="false" data-i18n="auth.register">Cadastrar</button>
+      </div>
+
+      <!-- Form Login -->
+      <form id="form-login" class="auth-form" novalidate>
+        <h2 id="modal-auth-title" data-i18n="auth.login">Entrar</h2>
+        <label class="field">
+          <span data-i18n="auth.email">E-mail</span>
+          <input type="email" id="login-email" required autocomplete="email"
+                 placeholder="seu@email.com">
+        </label>
+        <label class="field">
+          <span data-i18n="auth.password">Senha</span>
+          <input type="password" id="login-password" required autocomplete="current-password"
+                 placeholder="••••••••">
+        </label>
+        <button type="submit" class="btn btn--primary btn--block" data-i18n="auth.login">
+          Entrar
+        </button>
+        <p class="auth-form__error" id="login-error" aria-live="polite"></p>
+      </form>
+
+      <!-- Form Cadastro -->
+      <form id="form-register" class="auth-form auth-form--hidden" novalidate>
+        <h2 data-i18n="auth.register">Criar Conta</h2>
+        <label class="field">
+          <span data-i18n="auth.name">Nome</span>
+          <input type="text" id="reg-name" required autocomplete="name"
+                 placeholder="Seu nome">
+        </label>
+        <label class="field">
+          <span data-i18n="auth.email">E-mail</span>
+          <input type="email" id="reg-email" required autocomplete="email"
+                 placeholder="seu@email.com">
+        </label>
+        <label class="field">
+          <span data-i18n="auth.password">Senha</span>
+          <input type="password" id="reg-password" required autocomplete="new-password"
+                 placeholder="Mínimo 4 caracteres" minlength="4">
+        </label>
+        <button type="submit" class="btn btn--primary btn--block" data-i18n="auth.register">
+          Criar Conta
+        </button>
+        <p class="auth-form__error" id="reg-error" aria-live="polite"></p>
+        <!-- TODO (produção): substitua o armazenamento em texto por hash bcrypt + API REST segura -->
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: PALPITE ===== -->
+  <div class="modal" id="modal-prediction" role="dialog" aria-modal="true"
+       aria-labelledby="prediction-title">
+    <div class="modal__box modal__box--sm">
+      <button class="modal__close" data-close="modal-prediction" aria-label="Fechar">✕</button>
+      <h2 id="prediction-title" data-i18n="prediction.title">Seu Palpite</h2>
+      <p id="prediction-event-name" class="prediction__event-name"></p>
+
+      <div class="prediction__score">
+        <input type="number" id="pred-home" min="0" max="99" value="0"
+               class="prediction__input" aria-label="Gols time da casa">
+        <span class="prediction__vs">×</span>
+        <input type="number" id="pred-away" min="0" max="99" value="0"
+               class="prediction__input" aria-label="Gols time visitante">
+      </div>
+
+      <div id="prediction-saved" class="prediction__saved" style="display:none" aria-live="polite">
+        <span data-i18n="prediction.saved">✅ Palpite salvo!</span>
+        <span id="prediction-saved-score"></span>
+      </div>
+
+      <button id="btn-save-prediction" class="btn btn--primary btn--block" data-i18n="prediction.save">
+        Cravou! 🎯
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CONFIGURAÇÕES ===== -->
+  <div class="modal" id="modal-settings" role="dialog" aria-modal="true"
+       aria-labelledby="settings-title">
+    <div class="modal__box">
+      <button class="modal__close" data-close="modal-settings" aria-label="Fechar">✕</button>
+      <h2 id="settings-title" data-i18n="settings.title">Configurações</h2>
+
+      <!-- Tema -->
+      <div class="settings-group">
+        <label class="settings-label" data-i18n="settings.theme">Tema</label>
+        <div class="settings-row">
+          <button class="settings-option settings-option--active"
+                  data-setting="theme" data-value="light" data-i18n="settings.light">☀️ Claro</button>
+          <button class="settings-option"
+                  data-setting="theme" data-value="dark" data-i18n="settings.dark">🌙 Escuro</button>
+        </div>
+      </div>
+
+      <!-- Idioma -->
+      <div class="settings-group">
+        <label class="settings-label" data-i18n="settings.lang">Idioma</label>
+        <div class="settings-row">
+          <button class="settings-option settings-option--active"
+                  data-setting="lang" data-value="pt">🇧🇷 PT</button>
+          <button class="settings-option"
+                  data-setting="lang" data-value="en">🇺🇸 EN</button>
+          <button class="settings-option"
+                  data-setting="lang" data-value="es">🇪🇸 ES</button>
+        </div>
+      </div>
+
+      <!-- Volume -->
+      <div class="settings-group">
+        <label class="settings-label" for="volume-slider"
+               data-i18n="settings.volume">Volume <span id="volume-display">50%</span></label>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.05"
+               value="0.5" class="slider" aria-label="Volume dos sons">
+      </div>
+
+      <!-- Tamanho de fonte -->
+      <div class="settings-group">
+        <label class="settings-label" data-i18n="settings.fontSize">Tamanho de Fonte</label>
+        <div class="settings-row">
+          <button class="settings-option" data-setting="fontSize" data-value="S"
+                  style="font-size:0.8rem" data-i18n="settings.fontS">P</button>
+          <button class="settings-option settings-option--active"
+                  data-setting="fontSize" data-value="M" data-i18n="settings.fontM">M</button>
+          <button class="settings-option" data-setting="fontSize" data-value="L"
+                  style="font-size:1.15rem" data-i18n="settings.fontL">G</button>
+        </div>
+      </div>
+
+      <!-- Acessibilidade -->
+      <div class="settings-group">
+        <span class="settings-label" data-i18n="settings.accessibility">Acessibilidade</span>
+        <div class="settings-toggle">
+          <label class="toggle">
+            <input type="checkbox" id="toggle-contrast" role="switch"
+                   aria-checked="false">
+            <span class="toggle__track"></span>
+            <span data-i18n="settings.contrast">Alto contraste</span>
+          </label>
+        </div>
+        <div class="settings-toggle" style="margin-top:0.5rem">
+          <label class="toggle">
+            <input type="checkbox" id="toggle-motion" role="switch"
+                   aria-checked="false">
+            <span class="toggle__track"></span>
+            <span data-i18n="settings.motion">Reduzir animações</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOASTS ===== -->
+  <div id="toast-container" class="toast-container"
+       aria-live="polite" aria-atomic="false" role="status"></div>
+
+  <!-- Ponto de entrada da aplicação -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

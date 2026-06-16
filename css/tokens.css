@@ -1,0 +1,136 @@
+/* =============================================
+   tokens.css — Variáveis de design (tema, cores, tipografia)
+   Controladas via atributos no <html>:
+     data-theme="light|dark"
+     data-contrast="normal|high"
+     data-motion="normal|reduce"
+   ============================================= */
+
+:root {
+  /* --- Acento principal --- */
+  --clr-accent:        #00b86b;
+  --clr-accent-dark:   #00954f;
+  --clr-accent-glow:   rgba(0, 184, 107, 0.25);
+  --clr-secondary:     #2563eb;
+  --clr-secondary-dk:  #1d4ed8;
+
+  /* --- Status --- */
+  --clr-open:          #00b86b;
+  --clr-live:          #ef4444;
+  --clr-finished:      #6b7280;
+
+  /* --- Tema claro (padrão) --- */
+  --bg:                #f0f4f8;
+  --bg-gradient:       linear-gradient(135deg, #e8f5ee 0%, #f0f4f8 60%, #e8edf5 100%);
+  --bg-card:           #ffffff;
+  --bg-card-hover:     #f8fffe;
+  --bg-topbar:         #ffffff;
+  --bg-sidebar:        #1e293b;
+  --bg-sidebar-item:   rgba(255,255,255,0.06);
+  --bg-modal:          rgba(15, 23, 42, 0.55);
+  --bg-modal-box:      #ffffff;
+  --bg-input:          #f8fafc;
+
+  --text:              #1e293b;
+  --text-muted:        #64748b;
+  --text-sidebar:      #cbd5e1;
+  --text-on-accent:    #ffffff;
+
+  --border:            #e2e8f0;
+  --border-focus:      var(--clr-accent);
+
+  --shadow-sm:         0 1px 3px rgba(0,0,0,.07);
+  --shadow:            0 4px 16px rgba(0,0,0,.09);
+  --shadow-lg:         0 8px 32px rgba(0,0,0,.13);
+
+  /* --- Tipografia --- */
+  --font:              'Inter', system-ui, -apple-system, sans-serif;
+  --fs:                16px;           /* controlado via settings.js */
+  --fw-normal:         400;
+  --fw-medium:         500;
+  --fw-semibold:       600;
+  --fw-bold:           700;
+  --fw-extrabold:      800;
+
+  /* --- Espaçamento --- */
+  --gap-xs:  0.25rem;
+  --gap-sm:  0.5rem;
+  --gap:     1rem;
+  --gap-md:  1.5rem;
+  --gap-lg:  2rem;
+  --gap-xl:  3rem;
+
+  /* --- Bordas --- */
+  --radius-sm:   6px;
+  --radius:      12px;
+  --radius-lg:   20px;
+  --radius-full: 9999px;
+
+  /* --- Transições --- */
+  --transition:     0.2s ease;
+  --transition-slow:0.35s ease;
+
+  /* --- Topbar --- */
+  --topbar-h: 60px;
+}
+
+/* === TEMA ESCURO === */
+[data-theme="dark"] {
+  --bg:                #0a0f1e;
+  --bg-gradient:       linear-gradient(135deg, #0d1a2d 0%, #0a0f1e 60%, #0d1520 100%);
+  --bg-card:           #141e31;
+  --bg-card-hover:     #1a2640;
+  --bg-topbar:         #0d1520;
+  --bg-sidebar:        #060b14;
+  --bg-sidebar-item:   rgba(255,255,255,0.04);
+  --bg-modal:          rgba(0, 0, 0, 0.75);
+  --bg-modal-box:      #141e31;
+  --bg-input:          #1e293b;
+
+  --text:              #e2e8f0;
+  --text-muted:        #94a3b8;
+  --text-sidebar:      #94a3b8;
+
+  --border:            #1e3050;
+  --shadow-sm:         0 1px 3px rgba(0,0,0,.4);
+  --shadow:            0 4px 16px rgba(0,0,0,.5);
+  --shadow-lg:         0 8px 32px rgba(0,0,0,.7);
+
+  --clr-accent:        #00ff95;
+  --clr-accent-dark:   #00cc78;
+  --clr-accent-glow:   rgba(0, 255, 149, 0.2);
+  --clr-open:          #00ff95;
+}
+
+/* === ALTO CONTRASTE === */
+[data-contrast="high"] {
+  --bg:              #000000;
+  --bg-gradient:     #000000;
+  --bg-card:         #0a0a0a;
+  --bg-topbar:       #000000;
+  --bg-modal-box:    #0a0a0a;
+  --bg-input:        #111111;
+
+  --text:            #ffffff;
+  --text-muted:      #dddddd;
+  --border:          #ffffff;
+
+  --clr-accent:      #00ff95;
+  --clr-live:        #ff5555;
+  --clr-finished:    #aaaaaa;
+
+  --shadow:          none;
+  --shadow-lg:       none;
+}
+
+/* === REDUZIR ANIMAÇÕES === */
+[data-motion="reduce"] *,
+[data-motion="reduce"] *::before,
+[data-motion="reduce"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* === TAMANHO DE FONTE === */
+html { font-size: var(--fs); }
