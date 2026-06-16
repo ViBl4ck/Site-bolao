@@ -6,9 +6,9 @@ import { events as seedEvents } from './data.js';
 import { state }                from './state.js';
 import { store }                from './store.js';
 
-/* Retorna todos os eventos: seed fixos + bolões customizados */
+/* Retorna todos os eventos: seed fixos + bolões customizados + eventos da API */
 export function all() {
-  return [...seedEvents, ...state.customEvents];
+  return [...seedEvents, ...state.customEvents, ...state.apiEvents];
 }
 
 /* Adiciona um bolão customizado e persiste */

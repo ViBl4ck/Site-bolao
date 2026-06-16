@@ -6,6 +6,7 @@
 
 import { all as allEvents, getEventStatus } from './events.js';
 import { t }               from './i18n.js';
+import { teamHtml }        from './ui.js';
 
 let currentSlide   = 0;
 let timer          = null;
@@ -41,9 +42,9 @@ function renderSlides() {
           ${badgeMap[status]}
         </div>
         <div class="event-card__teams">
-          <span class="event-card__team">${ev.home}</span>
+          <span class="event-card__team">${teamHtml(ev.home, ev.hImg)}</span>
           <span class="event-card__vs">×</span>
-          <span class="event-card__team">${ev.away}</span>
+          <span class="event-card__team">${teamHtml(ev.away, ev.aImg)}</span>
         </div>
         ${resultHtml}
       </div>

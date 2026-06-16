@@ -1009,6 +1009,36 @@
   margin-bottom: var(--gap-sm);
 }
 
+/* ===== ESCUDO DE TIME (API) ===== */
+.team-badge {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+  border-radius: 2px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.team-badge__name {
+  vertical-align: middle;
+}
+
+/* Botão de refresh girando durante o fetch */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn--spinning {
+  animation: spin 0.8s linear infinite;
+  pointer-events: none;
+}
+
+[data-motion="reduce"] .btn--spinning {
+  animation: none;
+  opacity: 0.6;
+}
+
 /* ===== TOPBAR — botão de perfil (username chip) ===== */
 .topbar__username-btn {
   background: var(--clr-accent-glow);

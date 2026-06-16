@@ -21,7 +21,8 @@ export const state = {
   user:         null,
   predictions:  {},
   settings:     { ...defaults.settings },
-  customEvents: []
+  customEvents: [],
+  apiEvents:    []   /* em memória; não persistido no localStorage */
 };
 
 /* Carrega dados persistidos do localStorage */

@@ -12,9 +12,10 @@ import { initPredictions, openPredictionModal } from './predictions.js';
 import { initCarousel, rebuildCarousel } from './carousel.js';
 import { renderRanking }           from './ranking.js';
 import { initSettings, applySettings } from './settings.js';
-import { setupModalClose, toast, openModal } from './ui.js';
+import { setupModalClose, toast, openModal, teamHtml } from './ui.js';
 import { Creator, initCreator, openSetResultModal } from './creator.js';
 import { Profile }                 from './profile.js';
+import { Api }                     from './api.js';
 
 /* ---- 1. INICIALIZAÇÃO ---- */
 initState();
@@ -46,6 +47,15 @@ document.getElementById('nav-bet')?.addEventListener('click', e => {
 /* Botão da topbar */
 document.getElementById('btn-create')?.addEventListener('click', () => Creator.open());
 
+/* ---- 3c. REFRESH API ---- */
+document.getElementById('btn-refresh')?.addEventListener('click', () => {
+  const btn = document.getElementById('btn-refresh');
+  if (btn) { btn.disabled = true; btn.classList.add('btn--spinning'); }
+  loadApiEvents(true).finally(() => {
+    if (btn) { btn.disabled = false; btn.classList.remove('btn--spinning'); }
+  });
+});
+
 /* ---- 3b. PERFIL ---- */
 /* Nome do usuário na topbar abre o perfil */
 document.getElementById('topbar-profile-btn')?.addEventListener('click', () => Profile.open());
@@ -56,12 +66,39 @@ document.addEventListener('cravou:openprofile', () => Profile.open());
 /* Rastreia a view atual para re-renderizar perfil quando necessário */
 document.addEventListener('cravou:view', e => { currentView = e.detail; });
 
-/* ---- 4. RENDER INICIAL ---- */
+/* ---- 4. RENDER INICIAL (seed — UX instantânea) ---- */
 renderAllEvents();
 renderRanking();
 initCarousel();
 updateHeroStats();
 updateFooter();
+
+/* ---- 4b. CARREGAMENTO PROGRESSIVO DA API ---- */
+loadApiEvents(false);
+
+/* ============================================
+   CARREGAMENTO DA API
+   ============================================ */
+
+async function loadApiEvents(showFeedback) {
+  try {
+    const evs = await Api.fetchEvents();
+    state.apiEvents = evs;
+
+    if (evs.length > 0) {
+      renderAllEvents();
+      rebuildCarousel();
+      updateHeroStats();
+      if (showFeedback) toast(t('api.updated'), 'success');
+    } else {
+      console.warn('[api] Nenhum evento retornado; mantendo seed.');
+      if (showFeedback) toast(t('api.offline'), 'info');
+    }
+  } catch (err) {
+    console.warn('[api] Falha ao carregar eventos da API:', err.message);
+    if (showFeedback) toast(t('api.offline'), 'info');
+  }
+}
 
 /* ---- 5. TIMERS ---- */
 /* Atualiza countdowns a cada segundo */
@@ -229,9 +266,9 @@ function buildCardHTML(ev, status) {
         </div>
       </div>
       <div class="event-card__teams">
-        <span class="event-card__team">${ev.home}</span>
+        <span class="event-card__team">${teamHtml(ev.home, ev.hImg)}</span>
         <span class="event-card__vs">×</span>
-        <span class="event-card__team">${ev.away}</span>
+        <span class="event-card__team">${teamHtml(ev.away, ev.aImg)}</span>
       </div>
       ${resultArea}
       ${countdownArea}

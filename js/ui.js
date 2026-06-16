@@ -2,6 +2,16 @@
    ui.js — Helpers de interface: toasts, modais.
    ============================================= */
 
+/* --- TEAM BADGE ---
+   Retorna HTML inline do time: imagem do escudo (API) ou o nome/emoji (seed/custom).
+   O onerror esconde a imagem quebrada sem deixar alt text visível. */
+export function teamHtml(name, img) {
+  if (!img) return name;
+  const safe = name.replace(/[<>"&]/g, c => ({ '<':'&lt;', '>':'&gt;', '"':'&quot;', '&':'&amp;' }[c]));
+  return `<img src="${img}" class="team-badge" loading="lazy" alt="" aria-hidden="true"
+    onerror="this.style.display='none'"><span class="team-badge__name">${safe}</span>`;
+}
+
 /* --- TOASTS --- */
 export function toast(msg, type = 'info', duration = 3500) {
   const container = document.getElementById('toast-container');
