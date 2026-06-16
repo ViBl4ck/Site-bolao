@@ -36,8 +36,8 @@ export function applySettings(s = state.settings) {
 
 /* Atualiza o estado visual dos botões e sliders no modal */
 function syncModalControls(s) {
-  /* Botões de opção */
-  document.querySelectorAll('.settings-option').forEach(btn => {
+  /* Botões de opção — apenas os com data-setting (ignora data-cat do criador) */
+  document.querySelectorAll('.settings-option[data-setting]').forEach(btn => {
     const setting = btn.dataset.setting;
     const value   = btn.dataset.value;
     const active  = String(s[setting]) === String(value);
@@ -86,8 +86,8 @@ export function initSettings() {
     openModal('modal-settings');
   });
 
-  /* Botões de opção (tema, idioma, fonte) */
-  document.querySelectorAll('.settings-option').forEach(btn => {
+  /* Botões de opção (tema, idioma, fonte) — apenas os com data-setting */
+  document.querySelectorAll('.settings-option[data-setting]').forEach(btn => {
     btn.addEventListener('click', () => {
       const { setting, value } = btn.dataset;
       if (setting) changeSetting(setting, value);

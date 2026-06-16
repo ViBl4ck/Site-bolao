@@ -3,16 +3,16 @@
    Mescla os pontos fixos com os calculados de palpites.
    ============================================= */
 
-import { rankingBase, events } from './data.js';
+import { rankingBase }          from './data.js';
 import { state }               from './state.js';
-import { getEventStatus, calcPoints } from './events.js';
+import { all as allEvents, getEventStatus, calcPoints } from './events.js';
 import { t }                   from './i18n.js';
 
-/* Calcula os pontos acumulados do usuário nos eventos encerrados */
+/* Calcula os pontos acumulados do usuário nos eventos encerrados (seed + custom) */
 function calcUserPoints() {
   if (!state.user) return 0;
 
-  return events.reduce((total, ev) => {
+  return allEvents().reduce((total, ev) => {
     if (getEventStatus(ev) !== 'finished') return total;
     const pred = state.predictions[ev.id];
     const pts  = calcPoints(pred, ev.result);

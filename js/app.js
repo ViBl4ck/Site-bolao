@@ -4,9 +4,8 @@
    ============================================= */
 
 import { initState, state }        from './state.js';
-import { events }                  from './data.js';
 import { t, apply as applyI18n }   from './i18n.js';
-import { getEventStatus, calcPoints, formatCountdown } from './events.js';
+import { all as allEvents, getEventStatus, calcPoints, formatCountdown } from './events.js';
 import { initSidebar }             from './sidebar.js';
 import { initAuth }                from './auth.js';
 import { initPredictions, openPredictionModal } from './predictions.js';
@@ -14,6 +13,7 @@ import { initCarousel, rebuildCarousel } from './carousel.js';
 import { renderRanking }           from './ranking.js';
 import { initSettings, applySettings } from './settings.js';
 import { setupModalClose, toast, openModal } from './ui.js';
+import { Creator, initCreator, openSetResultModal } from './creator.js';
 
 /* ---- 1. INICIALIZAÇÃO ---- */
 initState();
@@ -25,28 +25,46 @@ setupModalClose();
 initAuth();
 initPredictions();
 initSettings();
+initCreator();
 
-/* ---- 3. RENDER INICIAL ---- */
+/* ---- 3. CTAs "Criar Bolão" ---- */
+/* Hero CTA */
+document.getElementById('hero-cta')?.addEventListener('click', e => {
+  e.preventDefault();
+  Creator.open();
+});
+
+/* Item da sidebar "Faça sua aposta" */
+document.getElementById('nav-bet')?.addEventListener('click', e => {
+  e.preventDefault();
+  Creator.open();
+});
+
+/* Botão da topbar */
+document.getElementById('btn-create')?.addEventListener('click', () => Creator.open());
+
+/* ---- 4. RENDER INICIAL ---- */
 renderAllEvents();
 renderRanking();
 initCarousel();
 updateHeroStats();
 updateFooter();
 
-/* ---- 4. TIMERS ---- */
+/* ---- 5. TIMERS ---- */
 /* Atualiza countdowns a cada segundo */
-const countdownTimer = setInterval(updateCountdowns, 1000);
+setInterval(updateCountdowns, 1000);
 
 /* Verifica mudanças de status a cada 30 segundos */
-const statusTimer = setInterval(() => {
+setInterval(() => {
   renderAllEvents();
   renderRanking();
 }, 30_000);
 
-/* ---- 5. EVENTOS GLOBAIS ---- */
+/* ---- 6. EVENTOS GLOBAIS ---- */
 document.addEventListener('cravou:authchange', () => {
   renderAllEvents();
   renderRanking();
+  updateHeroStats();
 });
 
 document.addEventListener('cravou:predictionchange', () => {
@@ -67,9 +85,10 @@ document.addEventListener('cravou:langchange', () => {
    ============================================ */
 
 function renderAllEvents() {
-  const open     = events.filter(e => getEventStatus(e) === 'open');
-  const live     = events.filter(e => getEventStatus(e) === 'live');
-  const finished = events.filter(e => getEventStatus(e) === 'finished');
+  const evs      = allEvents();
+  const open     = evs.filter(e => getEventStatus(e) === 'open');
+  const live     = evs.filter(e => getEventStatus(e) === 'live');
+  const finished = evs.filter(e => getEventStatus(e) === 'finished');
 
   renderGrid('open-events-grid',     open,     'open');
   renderGrid('live-events-grid',     live,     'live');
@@ -91,12 +110,11 @@ function renderGrid(gridId, evList, status) {
 
   grid.innerHTML = evList.map(ev => buildCardHTML(ev, status)).join('');
 
-  /* Associa listeners nos botões de palpite recém-criados */
+  /* Listeners: botões de palpite */
   grid.querySelectorAll('[data-event-id]').forEach(btn => {
     btn.addEventListener('click', () => {
-      const ev = events.find(e => e.id === btn.dataset.eventId);
+      const ev = allEvents().find(e => e.id === btn.dataset.eventId);
       if (!ev) return;
-
       if (!state.user) {
         toast('Faça login para palpitar! 👤', 'info');
         openModal('modal-auth');
@@ -105,20 +123,32 @@ function renderGrid(gridId, evList, status) {
       openPredictionModal(ev);
     });
   });
+
+  /* Listeners: botões "Definir resultado" (bolões do dono) */
+  grid.querySelectorAll('[data-set-result]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ev = allEvents().find(e => e.id === btn.dataset.setResult);
+      if (ev) openSetResultModal(ev);
+    });
+  });
 }
 
 function buildCardHTML(ev, status) {
   const pred   = state.predictions[ev.id];
   const points = (status === 'finished') ? calcPoints(pred, ev.result) : null;
 
-  /* ---- Badge ---- */
-  const badge = {
+  /* ---- Badges ---- */
+  const statusBadge = {
     open:     `<span class="badge badge--open">🟢 ${t('events.open')}</span>`,
     live:     `<span class="badge badge--live">${t('events.live')}</span>`,
     finished: `<span class="badge badge--finished">🏁 ${t('events.finished')}</span>`
   }[status];
 
-  /* ---- Área de resultado / placar ---- */
+  const customBadge = ev.custom
+    ? `<span class="badge badge--custom">🎲 ${t('create.customBadge')}</span>`
+    : '';
+
+  /* ---- Resultado ---- */
   let resultArea = '';
   if (status === 'finished' && ev.result) {
     resultArea = `
@@ -128,10 +158,10 @@ function buildCardHTML(ev, status) {
   /* ---- Countdown ---- */
   let countdownArea = '';
   if (status === 'open') {
-    const cd = formatCountdown(ev.startTime);
     countdownArea = `
       <p class="event-card__countdown">
-        ${t('events.countdown')} <span data-countdown="${ev.id}">${cd}</span>
+        ${t('events.countdown')}
+        <span data-countdown="${ev.id}">${formatCountdown(ev.startTime)}</span>
       </p>`;
   }
 
@@ -146,15 +176,13 @@ function buildCardHTML(ev, status) {
 
   /* ---- Pontos ---- */
   let pointsArea = '';
-  if (status === 'finished' && state.user && pred) {
+  if (status === 'finished' && state.user && pred && points !== null) {
     const labels = {
       2: t('events.exact'),
       1: t('events.result_hit'),
       0: t('events.miss')
     };
-    if (points !== null) {
-      pointsArea = `<p class="event-card__points event-card__points--${points}">${labels[points]}</p>`;
-    }
+    pointsArea = `<p class="event-card__points event-card__points--${points}">${labels[points]}</p>`;
   }
 
   /* ---- Botão de ação ---- */
@@ -164,13 +192,22 @@ function buildCardHTML(ev, status) {
     actionBtn = `<button class="btn btn--primary btn--sm" data-event-id="${ev.id}">${label}</button>`;
   } else if (status === 'live') {
     actionBtn = `<button class="btn btn--outline btn--sm" disabled>${t('events.locked')}</button>`;
+  } else if (status === 'finished' && ev.custom && !ev.result
+             && state.user && ev.owner === state.user.name) {
+    /* Dono pode definir resultado de bolões customizados ainda sem placar */
+    actionBtn = `<button class="btn btn--outline btn--sm" data-set-result="${ev.id}">
+                   🏁 ${t('create.setResult')}
+                 </button>`;
   }
 
   return `
     <article class="event-card event-card--${status}">
       <div class="event-card__header">
         <span class="event-card__competition">${ev.competition}</span>
-        ${badge}
+        <div class="event-card__badges">
+          ${customBadge}
+          ${statusBadge}
+        </div>
       </div>
       <div class="event-card__teams">
         <span class="event-card__team">${ev.home}</span>
@@ -181,7 +218,7 @@ function buildCardHTML(ev, status) {
       ${countdownArea}
       ${predArea}
       ${pointsArea}
-      ${actionBtn ? `<div style="margin-top:auto;padding-top:var(--gap-sm)">${actionBtn}</div>` : ''}
+      ${actionBtn ? `<div class="event-card__action">${actionBtn}</div>` : ''}
     </article>`;
 }
 
@@ -190,13 +227,11 @@ function buildCardHTML(ev, status) {
    ============================================ */
 
 function updateCountdowns() {
-  /* Atualiza os spans de countdown existentes no DOM */
   document.querySelectorAll('[data-countdown]').forEach(span => {
-    const ev = events.find(e => e.id === span.dataset.countdown);
+    const ev = allEvents().find(e => e.id === span.dataset.countdown);
     if (!ev) return;
 
-    const newStatus = getEventStatus(ev);
-    if (newStatus !== 'open') {
+    if (getEventStatus(ev) !== 'open') {
       /* Status mudou: re-renderiza tudo */
       renderAllEvents();
       renderRanking();
@@ -211,10 +246,16 @@ function updateCountdowns() {
    ============================================ */
 
 function updateHeroStats() {
-  const open = events.filter(e => getEventStatus(e) === 'open').length;
-  document.getElementById('stat-events').textContent  = events.length;
-  document.getElementById('stat-players').textContent = 9; /* base fixa + pode crescer */
-  document.getElementById('stat-open').textContent    = open;
+  const evs  = allEvents();
+  const open = evs.filter(e => getEventStatus(e) === 'open').length;
+  const statEvEl = document.getElementById('stat-events');
+  const statOpEl = document.getElementById('stat-open');
+  if (statEvEl) statEvEl.textContent = evs.length;
+  if (statOpEl) statOpEl.textContent = open;
+  /* Participantes: base fixa 9 + usuários cadastrados (localStorage) */
+  const users = JSON.parse(localStorage.getItem('cravou_users') ?? '[]');
+  const statPlEl = document.getElementById('stat-players');
+  if (statPlEl) statPlEl.textContent = Math.max(9, users.length);
 }
 
 /* ============================================
@@ -224,7 +265,7 @@ function updateHeroStats() {
 function updateFooter() {
   const now  = new Date();
   const year = now.getFullYear();
-  const date = now.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+  const date = now.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
   const el   = document.getElementById('footer-copy');
   if (el) el.textContent = `© ${year} Cravou · ${date}`;
 }

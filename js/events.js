@@ -1,6 +1,30 @@
 /* =============================================
-   events.js — Ciclo de vida dos eventos e pontuação.
+   events.js — Ciclo de vida, pontuação e store de eventos.
    ============================================= */
+
+import { events as seedEvents } from './data.js';
+import { state }                from './state.js';
+import { store }                from './store.js';
+
+/* Retorna todos os eventos: seed fixos + bolões customizados */
+export function all() {
+  return [...seedEvents, ...state.customEvents];
+}
+
+/* Adiciona um bolão customizado e persiste */
+export function addCustom(ev) {
+  state.customEvents.push(ev);
+  store.set('cravou_custom', state.customEvents);
+}
+
+/* Define o resultado de um evento customizado e força re-render */
+export function setResult(id, homeScore, awayScore) {
+  const ev = state.customEvents.find(e => e.id === id);
+  if (!ev) return;
+  ev.result = { home: homeScore, away: awayScore };
+  store.set('cravou_custom', state.customEvents);
+  document.dispatchEvent(new CustomEvent('cravou:authchange'));
+}
 
 /* Retorna o status atual calculado pelos timestamps */
 export function getEventStatus(event) {

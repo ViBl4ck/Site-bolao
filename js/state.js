@@ -18,16 +18,18 @@ const defaults = {
 
 /* Objeto mutável compartilhado entre módulos */
 export const state = {
-  user:        null,
-  predictions: {},
-  settings:    { ...defaults.settings }
+  user:         null,
+  predictions:  {},
+  settings:     { ...defaults.settings },
+  customEvents: []
 };
 
 /* Carrega dados persistidos do localStorage */
 export function initState() {
-  state.user        = store.get('cravou_user') ?? null;
-  state.predictions = store.get('cravou_predictions') ?? {};
-  const saved       = store.get('cravou_settings');
+  state.user         = store.get('cravou_user') ?? null;
+  state.predictions  = store.get('cravou_predictions') ?? {};
+  state.customEvents = store.get('cravou_custom') ?? [];
+  const saved        = store.get('cravou_settings');
   if (saved) state.settings = { ...defaults.settings, ...saved };
 }
 
@@ -44,4 +46,9 @@ export function savePredictions() {
 /* Persiste configurações */
 export function saveSettings() {
   store.set('cravou_settings', state.settings);
+}
+
+/* Persiste eventos customizados */
+export function saveCustomEvents() {
+  store.set('cravou_custom', state.customEvents);
 }

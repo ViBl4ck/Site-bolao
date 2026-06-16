@@ -842,6 +842,157 @@
   color: var(--text);
 }
 
+/* ===== TOPBAR — botão Criar (visível só com espaço) ===== */
+.topbar__create {
+  border-color: var(--clr-accent);
+  color: var(--clr-accent);
+}
+
+.topbar__create:hover {
+  background: var(--clr-accent);
+  color: var(--text-on-accent);
+}
+
+@media (max-width: 420px) {
+  .topbar__create { display: none; }
+}
+
+/* ===== EVENT CARD — header com múltiplos badges ===== */
+.event-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Área de ação (botão na base do card) */
+.event-card__action {
+  margin-top: auto;
+  padding-top: var(--gap-sm);
+}
+
+/* ===== BADGE — bolão customizado ===== */
+.badge--custom {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--clr-secondary);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+}
+
+/* ===== MODAL GRANDE (criador) ===== */
+.modal__box--lg {
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* ===== CRIADOR DE BOLÃO ===== */
+.matchup-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  margin-bottom: var(--gap-sm);
+}
+
+/* Grade: [nome A] [emoji] × [emoji] [nome B] [✕] */
+.matchup-row {
+  display: grid;
+  grid-template-columns: 1fr 2.4rem auto 2.4rem 1fr 2rem;
+  gap: var(--gap-xs);
+  align-items: center;
+}
+
+.matchup-input {
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45em 0.6em;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  min-width: 0;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.matchup-input:focus {
+  outline: none;
+  border-color: var(--clr-accent);
+  box-shadow: 0 0 0 3px var(--clr-accent-glow);
+}
+
+.matchup-emoji {
+  width: 2.4rem;
+  text-align: center;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4em 0.1em;
+  font-size: 1rem;
+  color: var(--text);
+  cursor: text;
+  font-family: inherit;
+  transition: border-color var(--transition);
+}
+
+.matchup-emoji:focus {
+  outline: none;
+  border-color: var(--clr-accent);
+}
+
+.matchup-vs {
+  text-align: center;
+  font-weight: var(--fw-bold);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.matchup-remove {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+
+.matchup-remove:hover {
+  background: var(--clr-live);
+  color: #fff;
+  border-color: var(--clr-live);
+}
+
+.matchup-add-btn {
+  margin-top: var(--gap-sm);
+}
+
+/* Campos de data lado a lado */
+.creator-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-sm);
+}
+
+/* input[type="datetime-local"] herda o estilo de .field input */
+
+/* Responsivo: em tela pequena, emojis somem e datas empilham */
+@media (max-width: 520px) {
+  .matchup-row {
+    grid-template-columns: 1fr auto 1fr 2rem;
+  }
+
+  .matchup-emoji { display: none; }
+
+  .creator-dates { grid-template-columns: 1fr; }
+}
+
 /* ===== EMPTY STATE ===== */
 .empty-state {
   text-align: center;

@@ -4,8 +4,7 @@
    setas ‹ › e dots clicáveis.
    ============================================= */
 
-import { events }          from './data.js';
-import { getEventStatus }  from './events.js';
+import { all as allEvents, getEventStatus } from './events.js';
 import { t }               from './i18n.js';
 
 let currentSlide   = 0;
@@ -98,7 +97,7 @@ function resetTimer() { startTimer(); }
 
 /* ---- Inicialização pública ---- */
 export function initCarousel() {
-  featuredEvents = events.filter(e => e.featured);
+  featuredEvents = allEvents().filter(e => e.featured);
   if (featuredEvents.length === 0) return;
 
   renderSlides();
@@ -129,7 +128,10 @@ export function initCarousel() {
   });
 }
 
-/* Reconstrói os slides (chamado após troca de idioma) */
+/* Reconstrói os slides (chamado após troca de idioma ou novo evento) */
 export function rebuildCarousel() {
+  featuredEvents = allEvents().filter(e => e.featured);
   renderSlides();
+  renderDots();
+  updateCarousel();
 }

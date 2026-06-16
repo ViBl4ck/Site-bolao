@@ -36,7 +36,7 @@
           <a href="#live-events" class="sidebar__link" data-i18n="nav.live">🔴 Ao Vivo</a>
         </li>
         <li>
-          <a href="#open-events" class="sidebar__link sidebar__link--cta" data-i18n="nav.bet">🎯 Faça sua aposta</a>
+          <a href="#open-events" id="nav-bet" class="sidebar__link sidebar__link--cta" data-i18n="nav.bet">🎯 Faça sua aposta</a>
         </li>
       </ul>
     </nav>
@@ -56,6 +56,8 @@
 
     <nav class="topbar__actions" aria-label="Ações do usuário">
       <button id="btn-settings" class="btn btn--icon" aria-label="Configurações" title="Configurações">⚙️</button>
+      <button id="btn-create" class="btn btn--outline btn--sm topbar__create"
+              aria-label="Criar Bolão" data-i18n="create.topbarBtn">+ Criar</button>
 
       <!-- Exibido quando deslogado -->
       <button id="btn-auth" class="btn btn--primary btn--sm" data-i18n="auth.login">Entrar</button>
@@ -78,7 +80,7 @@
         <p class="hero__subtitle" data-i18n="hero.subtitle">
           Palpite em esportes, jogos e eventos. Compete com seus amigos e mostre quem cravou!
         </p>
-        <a href="#open-events" class="btn btn--primary btn--lg" data-i18n="hero.cta">
+        <a href="#open-events" id="hero-cta" class="btn btn--primary btn--lg" data-i18n="hero.cta">
           Faça seu Bolão 🎯
         </a>
         <div class="hero__stats" aria-label="Estatísticas">
@@ -315,6 +317,80 @@
           </label>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CRIAR BOLÃO ===== -->
+  <div class="modal" id="modal-creator" role="dialog" aria-modal="true"
+       aria-labelledby="creator-title">
+    <div class="modal__box modal__box--lg">
+      <button class="modal__close" data-close="modal-creator" aria-label="Fechar">✕</button>
+      <h2 id="creator-title" data-i18n="create.title">Criar Bolão</h2>
+
+      <!-- Categoria -->
+      <div class="settings-group">
+        <span class="settings-label" data-i18n="create.category">Categoria</span>
+        <div class="settings-row">
+          <button class="settings-option settings-option--active" data-cat="esportes"
+                  data-i18n="create.catSports">⚽ Esportes</button>
+          <button class="settings-option" data-cat="jogos"
+                  data-i18n="create.catGames">🎮 Jogos</button>
+          <button class="settings-option" data-cat="geral"
+                  data-i18n="create.catGeneral">🎲 Geral</button>
+        </div>
+      </div>
+
+      <!-- Nome do bolão -->
+      <div class="settings-group">
+        <label class="field">
+          <span data-i18n="create.name">Nome do bolão</span>
+          <input type="text" id="creator-name" maxlength="60"
+                 placeholder="Ex: Rodada 5 — Brasileirão" autocomplete="off">
+        </label>
+      </div>
+
+      <!-- Confrontos -->
+      <div class="settings-group">
+        <span class="settings-label" data-i18n="create.matchups">Confrontos</span>
+        <div id="creator-matchups" class="matchup-list"></div>
+        <button type="button" id="creator-add-row" class="btn btn--outline btn--sm matchup-add-btn"
+                data-i18n="create.addMatch">+ Adicionar confronto</button>
+      </div>
+
+      <!-- Datas -->
+      <div class="settings-group creator-dates">
+        <label class="field">
+          <span data-i18n="create.closesAt">Fecha palpites em</span>
+          <input type="datetime-local" id="creator-start">
+        </label>
+        <label class="field">
+          <span data-i18n="create.endsAt">Encerra em</span>
+          <input type="datetime-local" id="creator-end">
+        </label>
+      </div>
+
+      <p id="creator-error" class="auth-form__error" aria-live="polite"></p>
+      <button type="button" id="btn-creator-save" class="btn btn--primary btn--block"
+              data-i18n="create.btn">Faça seu Bolão 🎯</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: DEFINIR RESULTADO ===== -->
+  <div class="modal" id="modal-set-result" role="dialog" aria-modal="true"
+       aria-labelledby="set-result-title">
+    <div class="modal__box modal__box--sm">
+      <button class="modal__close" data-close="modal-set-result" aria-label="Fechar">✕</button>
+      <h2 id="set-result-title" data-i18n="create.setResultTitle">Definir Resultado</h2>
+      <p id="set-result-event-name" class="prediction__event-name"></p>
+      <div class="prediction__score">
+        <input type="number" id="set-result-home" min="0" max="99" value="0"
+               class="prediction__input" aria-label="Gols time da casa">
+        <span class="prediction__vs">×</span>
+        <input type="number" id="set-result-away" min="0" max="99" value="0"
+               class="prediction__input" aria-label="Gols time visitante">
+      </div>
+      <button type="button" id="btn-confirm-result" class="btn btn--primary btn--block"
+              data-i18n="create.setResult">Definir resultado</button>
     </div>
   </div>
 
